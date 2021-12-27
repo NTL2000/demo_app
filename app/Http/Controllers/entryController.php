@@ -18,9 +18,10 @@ class entryController extends Controller
      */
     public function index()
     {
-        //get user 
-        
-        return view('home');
+        // get all entry and entry owner name(eon) ,relation between eon-current user(<->) 
+        // select entry.*,user.name from entry inner join user on entry.user_id=user.id 
+        $Entries = Entry::with('User','Comment', 'Comment.User')->get();
+        return view('home',compact('Entries'));
     }
 
     /**

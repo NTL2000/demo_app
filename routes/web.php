@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\entryController;
+use App\Http\Controllers\commentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +24,10 @@ Route::get('/home', [App\Http\Controllers\entryController::class, 'index'])->nam
 // Route entry controller
 Route::resource("entry",entryController::class)->names([
     'store' => 'entry.store'
+]);
+
+// Route comment controller
+Route::resource("comment",commentController::class)->names([
+    'show' => 'comment.show',
+    'store' => 'comment.store'
 ]);

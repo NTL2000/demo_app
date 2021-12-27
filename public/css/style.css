@@ -8,3 +8,7 @@
 .required-input span{
     color: red;
 }
+.image img{
+    margin: 30px 0;
+    max-width: 300px;
+}

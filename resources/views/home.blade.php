@@ -4,54 +4,50 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            {{-- @if($Entries)
+            {{print_r($Entries[0]['User']->name);}}
+            @endif --}}
             @auth
                 <button class="btn_createPost" data-toggle="modal" data-target="#exampleModal">Create new post</button>
             @endauth
+            @foreach ($Entries as $entry)
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __($entry['User']->name) }}</div>
 
                 <div class="card-body">
                     <div class="body-content">
-                        <span></span>
+                        <h3>{{ __("#".$entry->title) }}</h3>
+                        <span>{{ __($entry->body) }}</span>
                     </div>
                     <div class="image">
-                        <img src="" alt="">
+                        <img src="{{asset('uploads/'.$entry->image_name)}}" alt="">
                     </div>
                 </div>
                 <div class="card-footer">
-                    footer
+                    <div class="list_comment">
+                        <ul class="list_comment_wraper">
+                            @foreach ($entry['Comment'] as $comment)
+                                <li>
+                                    <h5>{{ __("#".$comment['User']->name) }}</h5>
+                                    <p>{{ __($comment->body) }}</p>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @auth
+                        <div class="comment">
+                            <form method="POST" enctype="multipart/form-data" action="{{ route('comment.store')  }}" id="comment">
+                                @csrf
+                                <input name="message" placeholder="enter your comment" type="text" required>
+                                <input type="hidden" name="user" value="{{Auth::user()->name}}">
+                                <input type="hidden" name="entry_id" id="entry_id" value="{{$entry->id}}">
+                                <input type="submit" id="btn_comment" value="enter">
+                            </form>
+                        </div>
+                    @endauth
                 </div>
             </div>
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    <div class="body-content">
-                        <span></span>
-                    </div>
-                    <div class="image">
-                        <img src="" alt="">
-                    </div>
-                </div>
-                <div class="card-footer">
-                    footer
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    <div class="body-content">
-                        <span></span>
-                    </div>
-                    <div class="image">
-                        <img src="" alt="">
-                    </div>
-                </div>
-                <div class="card-footer">
-                    footer
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </div>
