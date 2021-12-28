@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\entryController;
 use App\Http\Controllers\commentController;
+use App\Http\Controllers\userController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,3 +32,14 @@ Route::resource("comment",commentController::class)->names([
     'show' => 'comment.show',
     'store' => 'comment.store'
 ]);
+
+// Route resource controller
+Route::resource("user",userController::class)->names([
+    'show' => 'user.show',
+    'store' => 'user.store'
+]);
+
+// Route follow and unfollow start
+Route::get('follow/{id}', [App\Http\Controllers\userController::class, 'followUser']);
+// Route follow and unfollow end
+Route::get('unfollow/{id}', [App\Http\Controllers\userController::class, 'unFollowUser']);

@@ -12,7 +12,7 @@
             @endauth
             @foreach ($Entries as $entry)
             <div class="card">
-                <div class="card-header">{{ __($entry['User']->name) }}</div>
+                <div class="card-header name_user"><a href="{{asset('user/'.$entry['User']->id)}}">{{ __($entry['User']->name) }}</a></div>
 
                 <div class="card-body">
                     <div class="body-content">
@@ -28,7 +28,7 @@
                         <ul class="list_comment_wraper">
                             @foreach ($entry['Comment'] as $comment)
                                 <li>
-                                    <h5>{{ __("#".$comment['User']->name) }}</h5>
+                                    <h5><a href="{{asset('user/'.$comment['User']->id)}}">{{ __("#".$comment['User']->name) }}</a></h5>
                                     <p>{{ __($comment->body) }}</p>
                                 </li>
                             @endforeach
@@ -36,18 +36,19 @@
                     </div>
                     @auth
                         <div class="comment">
-                            <form method="POST" enctype="multipart/form-data" action="{{ route('comment.store')  }}" id="comment">
+                            <form method="POST" action="{{ route('comment.store')  }}" class="comment_form">
                                 @csrf
                                 <input name="message" placeholder="enter your comment" type="text" required>
                                 <input type="hidden" name="user" value="{{Auth::user()->name}}">
-                                <input type="hidden" name="entry_id" id="entry_id" value="{{$entry->id}}">
-                                <input type="submit" id="btn_comment" value="enter">
+                                <input type="hidden" name="entry_id" class="entry_id" value="{{$entry->id}}">
+                                <input type="submit" class="btn_comment" value="enter">
                             </form>
                         </div>
                     @endauth
                 </div>
             </div>
             @endforeach
+            {{ $Entries->links() }}
         </div>
     </div>
 </div>

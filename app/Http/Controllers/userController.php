@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Comment;
+use App\Models\User;
+use App\Models\Relation;
+use Illuminate\Support\Facades\Auth;
 
-class commentController extends Controller
+class userController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,11 +37,7 @@ class commentController extends Controller
      */
     public function store(Request $request)
     {
-        $Comment = new Comment();
-        $Comment->user_id=auth()->user()->id;
-        $Comment->entry_id =$request->entry_id;
-        $Comment->body=$request->message;
-        $Comment->save();
+        //
     }
 
     /**
@@ -50,7 +48,16 @@ class commentController extends Controller
      */
     public function show($id)
     {
-        //
+        //show profile user
+        if(Auth::check()){
+            $current_user=auth()->user()->id;
+            $check_follow=Relation::where([
+                ['user_id', '=', $current_user],
+                ['following_user_id', '=', $id]
+            ])->count();
+            $user=User::where('id','=',$id)->get();
+            return view('profile',compact('check_follow','user'));
+        }
     }
 
     /**
@@ -85,5 +92,21 @@ class commentController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    // Follow user from profile
+    public function followUser($id){
+        $relation=new Relation();
+        $relation->user_id=Auth::user()->id;
+        $relation->following_user_id=$id;
+        $relation->save();
+    }
+    // Unfollow user from profile
+    public function unFollowUser($id){
+        $current_user=auth()->user()->id;
+        $result=Relation::where([
+            ['user_id', '=', $current_user],
+            ['following_user_id', '=', $id]
+        ])->delete();
     }
 }

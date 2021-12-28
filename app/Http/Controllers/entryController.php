@@ -20,7 +20,7 @@ class entryController extends Controller
     {
         // get all entry and entry owner name(eon) ,relation between eon-current user(<->) 
         // select entry.*,user.name from entry inner join user on entry.user_id=user.id 
-        $Entries = Entry::with('User','Comment', 'Comment.User')->get();
+        $Entries = Entry::with('User','Comment', 'Comment.User')->orderBy('id','desc')->paginate(10);
         return view('home',compact('Entries'));
     }
 
@@ -63,7 +63,7 @@ class entryController extends Controller
         return redirect()->back()->with('status', 'Post Successfully');
     }
     //save entry to db
-    public function saveEntry(Request $request, $image_url,$image_name)
+    private function saveEntry(Request $request, $image_url,$image_name)
     {
         $Entry = new Entry();
         $Entry->user_id=auth()->user()->id;
