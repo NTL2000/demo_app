@@ -18,3 +18,7 @@
 h5 a{
     text-decoration: none;
 }
+.menu_nav li a{
+    text-decoration: none;
+    color: black;
+}

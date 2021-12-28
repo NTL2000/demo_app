@@ -9,8 +9,10 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
-            <ul class="navbar-nav me-auto">
-
+            <ul class="navbar-nav me-auto menu_nav">
+                @auth
+                <li><a href="{{ route('entry.show',Auth::id()) }}">Following</a></li>
+                @endauth
             </ul>
 
             <!-- Right Side Of Navbar -->

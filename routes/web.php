@@ -24,6 +24,7 @@ Route::get('/home', [App\Http\Controllers\entryController::class, 'index'])->nam
 
 // Route entry controller
 Route::resource("entry",entryController::class)->names([
+    'show' => 'entry.show',
     'store' => 'entry.store'
 ]);
 

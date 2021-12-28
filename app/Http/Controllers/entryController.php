@@ -8,6 +8,7 @@ use App\Models\Entry;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Relation;
+use Illuminate\Support\Facades\Auth;
 
 class entryController extends Controller
 {
@@ -82,7 +83,23 @@ class entryController extends Controller
      */
     public function show($id)
     {
-        //
+        //list latest entries which are posted by the following users
+        $Entries = $this->getFeed(Auth::user());
+        return view('following',compact('Entries'));
+    }
+
+    /**
+     * Get feed for the provided user
+     * that means, only show the posts from the users that the current user follows.
+     *
+     * @param User $user                            The user that you're trying get the feed to
+     * @return \Illuminate\Database\Query\Builder   The latest posts
+     */
+    public function getFeed(User $user) 
+    {
+        $userIds = $user->Following()->get("following_user_id");
+        // $userIds[] = $user->id;
+        return Entry::with('User','Comment', 'Comment.User')->whereIn('user_id', $userIds)->latest()->paginate(10);
     }
 
     /**
