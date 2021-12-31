@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Relation;
+use App\Models\Entry;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 
 class userController extends Controller
@@ -16,7 +18,36 @@ class userController extends Controller
      */
     public function index()
     {
-        //
+        $user_id=Auth::user()->id;
+        //get all user following 
+        $followingUser=User::whereIn('id', function ($query) use ($user_id) {
+            $query->select('r.following_user_id')
+            ->from('relations as r')
+            ->Where('r.user_id',$user_id);
+        })->get();
+
+        // get all follower
+        $followerUser=User::whereIn('id', function ($query) use ($user_id) {
+            $query->select('r.user_id')
+            ->from('relations as r')
+            ->Where('r.following_user_id',$user_id);
+        })->get();
+
+        //get all user not follow
+        $notFollowUser=User::whereNotIn('id', function ($query) use ($user_id) {
+            $query->select('r.following_user_id')
+            ->from('relations as r')
+            ->Where('r.user_id',$user_id);
+        })
+        ->whereNotIn('id', function ($query) use ($user_id) {
+            $query->select('r.user_id')
+            ->from('relations as r')
+            ->Where('r.following_user_id',$user_id);
+        })
+        ->Where('id','!=',$user_id)
+        ->get();
+        // print_r($followingUser);
+        return view("friends",compact("followingUser",'notFollowUser','followerUser'));
     }
 
     /**
@@ -55,8 +86,14 @@ class userController extends Controller
                 ['user_id', '=', $current_user],
                 ['following_user_id', '=', $id]
             ])->count();
+
             $user=User::where('id','=',$id)->get();
-            return view('profile',compact('check_follow','user'));
+
+            $Entries=Entry::with('User','Comment', 'Comment.User')
+            ->where('user_id', $id)
+            ->latest()->paginate(10);
+
+            return view('profile',compact('check_follow','user','Entries'));
         }
     }
 

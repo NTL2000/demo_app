@@ -12,7 +12,10 @@
             @endauth
             @foreach ($Entries as $entry)
             <div class="card">
-                <div class="card-header name_user"><a href="{{asset('user/'.$entry['User']->id)}}">{{ __($entry['User']->name) }}</a></div>
+                <div class="card-header name_user">
+                    <a href="{{asset('user/'.$entry['User']->id)}}">{{ __($entry['User']->name) }}</a> 
+                    <span class="date">{{ $entry->formattedCreatedDate() }}</span>
+                </div>
 
                 <div class="card-body">
                     <div class="body-content">
@@ -28,7 +31,10 @@
                         <ul class="list_comment_wraper">
                             @foreach ($entry['Comment'] as $comment)
                                 <li>
-                                    <h5><a href="{{asset('user/'.$comment['User']->id)}}">{{ __("#".$comment['User']->name) }}</a></h5>
+                                    <h5>
+                                        <a href="{{asset('user/'.$comment['User']->id)}}">{{ __($comment['User']->name) }}</a>
+                                        <span class="date">{{ $comment->formattedCreatedDate() }}</span>
+                                    </h5>
                                     <p>{{ __($comment->body) }}</p>
                                 </li>
                             @endforeach
@@ -38,7 +44,8 @@
                         <div class="comment">
                             <form method="POST" action="{{ route('comment.store')  }}" class="comment_form">
                                 @csrf
-                                <input name="message" placeholder="enter your comment" type="text" required>
+                                <input name="message" placeholder="enter your comment" type="text" tabindex="-1" required>
+                                <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
                                 <input type="hidden" name="user" value="{{Auth::user()->name}}">
                                 <input type="hidden" name="entry_id" class="entry_id" value="{{$entry->id}}">
                                 <input type="submit" class="btn_comment" value="enter">

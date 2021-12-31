@@ -11,7 +11,7 @@
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav me-auto menu_nav">
                 @auth
-                <li><a href="{{ route('entry.show',Auth::id()) }}">Following</a></li>
+                <li><a href="{{ route('user.index') }}">Friends</a></li>
                 @endauth
             </ul>
 

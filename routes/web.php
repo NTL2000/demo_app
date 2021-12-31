@@ -36,6 +36,7 @@ Route::resource("comment",commentController::class)->names([
 
 // Route resource controller
 Route::resource("user",userController::class)->names([
+    'index' => 'user.index',
     'show' => 'user.show',
     'store' => 'user.store'
 ]);

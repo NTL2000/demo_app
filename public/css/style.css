@@ -10,7 +10,7 @@
 }
 .image img{
     margin: 30px 0;
-    max-width: 300px;
+    max-width: 100%;
 }
 .name_user a{
     text-decoration: none;

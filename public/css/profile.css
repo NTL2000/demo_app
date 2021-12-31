@@ -80,3 +80,22 @@ body {
     text-decoration: none;
     color: black;
 }
+.card{
+    margin-bottom: 15px !important;
+}
+.left_profile{
+    position: fixed;
+    margin-top: 20px;
+    left: 0px;
+}
+.profile_container{
+    position: relative;
+}
+.right_profile{
+    position: absolute;
+    right: 0px;
+}
+.image img{
+    margin: 30px 0;
+    max-width: 100%;
+}
